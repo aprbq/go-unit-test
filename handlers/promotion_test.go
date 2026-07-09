@@ -1,6 +1,9 @@
+//go:build unit
+
 package handlers_test
 
 import (
+	"errors"
 	"fmt"
 	"gotest/handlers"
 	"gotest/services"
@@ -35,9 +38,55 @@ func TestPromotionCalculateDiscount(t *testing.T) {
 		defer res.Body.Close()
 
 		//Assert
-		assert.Equal(t, fiber.StatusOK, res.StatusCode)
+		if assert.Equal(t, fiber.StatusOK, res.StatusCode) {
+			body, _ := io.ReadAll(res.Body)
+			assert.Equal(t, strconv.Itoa(expected), string(body))
+		}
 
-		body, _ := io.ReadAll(res.Body)
-		assert.Equal(t, strconv.Itoa(expected), string(body))
+	})
+
+	t.Run("invalid amount", func(t *testing.T) {
+		// Arrage
+		amount := "asdasd"
+
+		promoService := services.NewPromotionServiceMock()
+		promoHandler := handlers.NewPromotionHanler(promoService)
+
+		//http://localhost:8000/calculate?amount=100
+		app := fiber.New()
+		app.Get("/calculate", promoHandler.CalculateDiscount)
+
+		req := httptest.NewRequest("GET", fmt.Sprintf("/calculate?amount=%v", amount), nil)
+
+		//Act
+		res, _ := app.Test(req)
+		defer res.Body.Close()
+
+		//Assert
+		assert.Equal(t, fiber.StatusBadRequest, res.StatusCode)
+		promoService.AssertNotCalled(t, "CalculateDiscount")
+	})
+
+	t.Run("service error", func(t *testing.T) {
+		//Arrage
+		amount := 100
+
+		promoService := services.NewPromotionServiceMock()
+		promoService.On("CalculateDiscount", amount).Return(0, errors.New(""))
+
+		promoHandler := handlers.NewPromotionHanler(promoService)
+
+		//http://localhost:8000/calculate?amount=100
+		app := fiber.New()
+		app.Get("/calculate", promoHandler.CalculateDiscount)
+
+		req := httptest.NewRequest("GET", fmt.Sprintf("/calculate?amount=%v", amount), nil)
+
+		//Act
+		res, _ := app.Test(req)
+		defer res.Body.Close()
+
+		//Assert
+		assert.Equal(t, fiber.StatusNotFound, res.StatusCode)
 	})
 }
