@@ -1,11 +1,12 @@
 package services_test
 
 import (
+	"fmt"
 	"gotest/services"
 	"testing"
 )
 
-func TestCheckGradeA(t *testing.T) {
+func TestCheckGrade(t *testing.T) {
 	type testCase struct {
 		name     string
 		score    int
@@ -30,4 +31,15 @@ func TestCheckGradeA(t *testing.T) {
 		})
 	}
 
+}
+
+func BenchmarkCheckGrade(b *testing.B) {
+	for b.Loop() {
+		services.CheckGrade(80)
+	}
+}
+func ExampleCheckGrade() {
+	grade := services.CheckGrade(80)
+	fmt.Println(grade)
+	//Output: A
 }
