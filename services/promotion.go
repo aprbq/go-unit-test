@@ -5,7 +5,7 @@ import (
 )
 
 type PromotionService interface {
-	CalculateDiscount(amount int) (int, error)
+	CalculateDiscount(amount int) (discount int, err error)
 }
 
 type promotionService struct {
@@ -16,7 +16,7 @@ func NewPromotionService(promoRepo repositories.PromotionRepository) PromotionSe
 	return promotionService{promoRepo: promoRepo}
 }
 
-func (s promotionService) CalculateDiscount(amount int) (int, error) {
+func (s promotionService) CalculateDiscount(amount int) (discount int, err error) {
 	if amount <= 0 {
 		return 0, ErrZeroAmount
 	}
