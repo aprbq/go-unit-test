@@ -17,18 +17,19 @@ import (
 )
 
 func TestPromotionCalculateDiscountIntegrationService(t *testing.T) {
+	//Arrange
 	amount := 100
 	expected := 80
 
 	promoRepo := repositories.NewPromotionRepositoryMock()
 	promoRepo.On("GetPromotion").Return(repositories.Promotion{
 		ID:              1,
-		Purchasemin:     100,
+		PurchaseMin:     100,
 		DiscountPercent: 20,
 	}, nil)
 
 	prromoService := services.NewPromotionService(promoRepo)
-	promoHandler := handlers.NewPromotionHanler(prromoService)
+	promoHandler := handlers.NewPromotionHandler(prromoService)
 
 	//http://localhost:8000/calculate?amount=100
 	app := fiber.New()
