@@ -1,5 +1,3 @@
-//go:build unit
-
 package handlers_test
 
 import (
