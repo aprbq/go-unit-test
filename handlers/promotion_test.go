@@ -18,14 +18,14 @@ import (
 
 func TestPromotionCalculateDiscount(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		//Arrage
+		//Arrange
 		amount := 100
 		expected := 80
 
 		promoService := services.NewPromotionServiceMock()
 		promoService.On("CalculateDiscount", amount).Return(expected, nil)
 
-		promoHandler := handlers.NewPromotionHanler(promoService)
+		promoHandler := handlers.NewPromotionHandler(promoService)
 
 		//http://localhost:8000/calculate?amount=100
 		app := fiber.New()
@@ -46,11 +46,11 @@ func TestPromotionCalculateDiscount(t *testing.T) {
 	})
 
 	t.Run("invalid amount", func(t *testing.T) {
-		// Arrage
+		// Arrange
 		amount := "asdasd"
 
 		promoService := services.NewPromotionServiceMock()
-		promoHandler := handlers.NewPromotionHanler(promoService)
+		promoHandler := handlers.NewPromotionHandler(promoService)
 
 		//http://localhost:8000/calculate?amount=100
 		app := fiber.New()
@@ -68,13 +68,13 @@ func TestPromotionCalculateDiscount(t *testing.T) {
 	})
 
 	t.Run("service error", func(t *testing.T) {
-		//Arrage
+		//Arrange
 		amount := 100
 
 		promoService := services.NewPromotionServiceMock()
 		promoService.On("CalculateDiscount", amount).Return(0, errors.New(""))
 
-		promoHandler := handlers.NewPromotionHanler(promoService)
+		promoHandler := handlers.NewPromotionHandler(promoService)
 
 		//http://localhost:8000/calculate?amount=100
 		app := fiber.New()

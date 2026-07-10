@@ -15,7 +15,7 @@ type promotionHandler struct {
 	promoSrv services.PromotionService
 }
 
-func NewPromotionHanler(promoSrv services.PromotionService) PromotionHandler {
+func NewPromotionHandler(promoSrv services.PromotionService) PromotionHandler {
 	return promotionHandler{promoSrv: promoSrv}
 }
 

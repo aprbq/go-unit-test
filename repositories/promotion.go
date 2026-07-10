@@ -6,6 +6,6 @@ type PromotionRepository interface {
 
 type Promotion struct {
 	ID              int
-	Purchasemin     int
+	PurchaseMin     int
 	DiscountPercent int
 }
