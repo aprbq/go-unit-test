@@ -30,6 +30,18 @@ go test gotest/services -run="TestcheckGrade/success grade a"
 
 ```
 
+## คำสั่งผ่าน Makefile
+| คำสั่ง | ทำอะไร |
+|---|---|
+| `make run` | รันโปรแกรมหลัก (`go run .`) |
+| `make test` | รัน unit test ทั้งหมด |
+| `make test-unit` | รันเฉพาะ unit test ของ handlers |
+| `make test-integration` | รันเฉพาะ integration test (`-tags=integration`) |
+| `make test-all` | รันเทสทุกชนิดรวม integration |
+| `make bench` | รัน benchmark พร้อม memory stats |
+| `make cover` | รันเทสพร้อมสรุป coverage รายฟังก์ชัน |
+| `make tidy` | จัดระเบียบ dependency (`go mod tidy`) |
+
 ## เทคนิคที่ใช้
 - **Mock** — ใช้ `stretchr/testify/mock` จำลอง dependency แล้วตั้งค่าด้วย `.On(...).Return(...)` และตรวจด้วย `AssertNotCalled`
 - **Table-driven test** — วนเคสหลายกรณีใน `CheckGrade` เพื่อลดโค้ดซ้ำ
